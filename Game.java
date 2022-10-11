@@ -25,6 +25,9 @@ class Game
 
     private Parser parser;
     private Room currentRoom;
+
+    // rooms
+    Room lodge, pickNPay, paterNoster, rugbyField, beach;
         
     /**
      * Create the game and initialise its internal map.
@@ -40,23 +43,21 @@ class Game
      */
     private void createRooms()
     {
-        Room outside, theatre, pub, lab, office;
-      
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theatre = new Room("in a lecture theatre");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        lodge = new Room("at the Lodge, the center of the town Langebaan🏘");
+        pickNPay = new Room("at the town mall🛒");
+        paterNoster = new Room("in a small village ~15km north with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
+        rugbyField = new Room("at the rugby field. Are you ready to get rumbled?🏉");
+        beach = new Room("At the beach 🌴🏖. Be carefull of the great white shark");
         
         // initialise room exits
-        outside.setExits(null, theatre, lab, pub);
-        theatre.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        lodge.setExits(null, pickNPay, rugbyField, paterNoster);
+        pickNPay.setExits(null, null, null, lodge);
+        paterNoster.setExits(null, lodge, null, null);
+        rugbyField.setExits(lodge, beach, null, null);
+        beach.setExits(null, null, null, rugbyField);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = lodge;  // start game outside
     }
 
     /**
