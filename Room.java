@@ -28,8 +28,24 @@ class Room
      */
     public Room(String description) 
     {
-        this.description = description;
+       if(description.equals("north"))
+       {
+        System.out.print(northExit);
+       }
+       if(description.equals("east"))
+       {
+        System.out.print(eastExit);
+       }
+       if(description.equals("south"))
+       {
+        System.out.print(southExit); 
+       }
+       if(description.equals("west"))
+       {
+        System.out.print(westExit);
+       }
     }
+
 
     /**
      * Define the exits of this room.  Every direction either leads

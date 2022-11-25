@@ -111,7 +111,7 @@ class Game
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
+            System.out.println("Formuliere wie ein schlauer Mensch ...IDIOT!");
             return false;
         }
 
