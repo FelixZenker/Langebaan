@@ -24,6 +24,7 @@ class Game {
 
     private Parser parser;
     private Room currentRoom;
+    private Boss endboss; 
 
     // rooms
     Room lodge, pickNPay, paterNoster, rugbyField, beach;
@@ -34,6 +35,7 @@ class Game {
     public Game() {
         createRooms();
         parser = new Parser();
+        endboss = new Boss(pickNPay, "Uwe Ngola");
     }
 
     /**
@@ -43,17 +45,35 @@ class Game {
         // create the rooms
         lodge = new Room("at the Lodge, the center of the town Langebaan🏘");
         pickNPay = new Room("at the town mall🛒");
-        paterNoster = new Room(
-                "in a small village ~15km north with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
+        paterNoster = new Room("in a small village ~15km west with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
         rugbyField = new Room("at the rugby field. Are you ready to get rumbled?🏉");
         beach = new Room("At the beach 🌴🏖. Be carefull of the great white shark");
 
         // initialise room exits
-        lodge.setExits(null, pickNPay, rugbyField, paterNoster);
-        pickNPay.setExits(null, null, null, lodge);
-        paterNoster.setExits(null, lodge, null, null);
-        rugbyField.setExits(lodge, beach, null, null);
-        beach.setExits(null, null, null, rugbyField);
+        lodge.setExit("north", null);
+        lodge.setExit("east", pickNPay);
+        lodge.setExit("south", rugbyField);
+        lodge.setExit("west", paterNoster);
+
+        pickNPay.setExit("north", null);
+        pickNPay.setExit("east", null);
+        pickNPay.setExit("south", null);
+        pickNPay.setExit("west", lodge);
+
+        paterNoster.setExit("north",null);
+        paterNoster.setExit("east", lodge);
+        paterNoster.setExit("south", null);
+        paterNoster.setExit("west", null);
+
+        rugbyField.setExit("north", lodge);
+        rugbyField.setExit("east", beach);
+        rugbyField.setExit("south", null);
+        rugbyField.setExit("west", null);
+        
+        beach.setExit("north", null);
+        beach.setExit("east", null);
+        beach.setExit("south", null);
+        beach.setExit("west", rugbyField);
 
         currentRoom = lodge; // start game outside
     }
@@ -75,6 +95,10 @@ class Game {
         System.out.println("Thank you for playing.  Good bye.");
     }
 
+    private void printRoomInfo(){
+        System.out.println("Exits: " + currentRoom.getExitsString());
+    }
+
     /**
      * Print out the opening message for the player.
      */
@@ -85,7 +109,7 @@ class Game {
         System.out.println("Type 'help' if you need help.");
         System.out.println();
         System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("Exits: ");
+        printRoomInfo();
 
     }
 
@@ -150,7 +174,7 @@ class Game {
         else {
             currentRoom = nextRoom;
             System.out.println("You are " + currentRoom.getDescription());
-            System.out.println(currentRoom.getExitsString());
+            printRoomInfo();
         }
     }
 
