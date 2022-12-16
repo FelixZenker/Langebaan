@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * This class is the main class of the "World of Zuul" application.
  * "World of Zuul" is a very simple, text based adventure game. Users
@@ -24,7 +26,7 @@ class Game {
 
     private Parser parser;
     private Room currentRoom;
-    private Boss endboss; 
+    private Boss endboss;
 
     // rooms
     Room lodge, pickNPay, paterNoster, rugbyField, beach;
@@ -35,7 +37,7 @@ class Game {
     public Game() {
         createRooms();
         parser = new Parser();
-        endboss = new Boss(pickNPay, "Uwe Ngola");
+        endboss = new Boss(pickNPay, "Harald");
     }
 
     /**
@@ -45,7 +47,8 @@ class Game {
         // create the rooms
         lodge = new Room("at the Lodge, the center of the town Langebaan🏘");
         pickNPay = new Room("at the town mall🛒");
-        paterNoster = new Room("in a small village ~15km west with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
+        paterNoster = new Room(
+                "in a small village ~15km west with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
         rugbyField = new Room("at the rugby field. Are you ready to get rumbled?🏉");
         beach = new Room("At the beach 🌴🏖. Be carefull of the great white shark");
 
@@ -60,7 +63,7 @@ class Game {
         pickNPay.setExit("south", null);
         pickNPay.setExit("west", lodge);
 
-        paterNoster.setExit("north",null);
+        paterNoster.setExit("north", null);
         paterNoster.setExit("east", lodge);
         paterNoster.setExit("south", null);
         paterNoster.setExit("west", null);
@@ -69,7 +72,7 @@ class Game {
         rugbyField.setExit("east", beach);
         rugbyField.setExit("south", null);
         rugbyField.setExit("west", null);
-        
+
         beach.setExit("north", null);
         beach.setExit("east", null);
         beach.setExit("south", null);
@@ -95,7 +98,7 @@ class Game {
         System.out.println("Thank you for playing.  Good bye.");
     }
 
-    private void printRoomInfo(){
+    private void printRoomInfo() {
         System.out.println("Exits: " + currentRoom.getExitsString());
     }
 
@@ -105,14 +108,13 @@ class Game {
     private void printWelcome() {
         System.out.println();
         System.out.println("Welcome to Adventure!");
-        System.out.println("Adventure is a new, incredibly boring adventure game.");
+        System.out.println("Adventure is a new, incredibly amazing game. Finde den Boss, um das Spiel zu gewinnen");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
         System.out.println("You are " + currentRoom.getDescription());
         printRoomInfo();
 
     }
-
 
     /**
      * Given a command, process (that is: execute) the command.
@@ -132,13 +134,47 @@ class Game {
             printHelp();
         else if (commandWord.equals("go"))
             goRoom(command);
+        else if (commandWord.equals("challenge"))
+            challengeBoss();
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);
 
+        if (endboss.getGeschlagen() == true) {
+            wantToQuit = true;
+        }
         return wantToQuit;
     }
 
     // implementations of user commands:
+
+    private void challengeBoss() {
+
+        if (currentRoom == endboss.getLocation()) {
+            System.out.println("Your'e challenging the big boss Harald");
+
+            Random zufallsgenerator = new Random();
+            int zahl1 = zufallsgenerator.nextInt((10 - 1) + 1) + 1; // gegoogled
+            int zahl2 = zufallsgenerator.nextInt((10 - 1) + 1) + 1; // gegoogled
+
+            System.out.println("Du gewinnst das Spiel, indem du das Matherätzel löst: " + zahl1 + "x" + zahl2 + " = ?");
+            System.out.println(
+                    "Hinweis zur Eingabe: Schreiebe zunächst ein ? und ein Leerzeichen und dann das Ergebnis!");
+            Parser antwortParser = new Parser();
+            Command antwort = antwortParser.getCommand();
+            String antwortString = antwort.getSecondWord();
+            int antwortAlsZahl = Integer.parseInt(antwortString);
+
+            if (antwortAlsZahl == (zahl1 * zahl2)) {
+                System.out.println("Glückwunsch, du hast das Spiel gewonnen!");
+                endboss.geschlagen();
+            } else {
+                System.out.println("Das Ergebnis ist leider falsch. Du bist weiter im Spiel gefangen.");
+            }
+
+        } else {
+            System.out.println("Hier ist kein Boss auffindbar.");
+        }
+    }
 
     /**
      * Print out some help information.
@@ -150,7 +186,7 @@ class Game {
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        parser.printCommands();
     }
 
     /**

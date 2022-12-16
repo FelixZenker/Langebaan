@@ -68,4 +68,10 @@ class Parser
         else
             return new Command(null, word2);
     }
+
+    public void printCommands()
+    {
+        System.out.println(commands.validCommandString());
+
+    }
 }
