@@ -23,4 +23,20 @@ class Boss {
         return this.beaten;
     }
 
+    public void setLocation(Room loc)
+    {
+        if(loc != null && this.location != loc)
+        {
+            this.location = loc;
+        }
+        else
+        {
+            System.out.println("Leider istein Problemaufgetreten.");
+        }
+    }
+
+    public String getName()
+    {
+        return this.name; 
+    }
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -30,11 +32,12 @@ class Game {
 
     // rooms
     Room lodge, pickNPay, paterNoster, rugbyField, beach;
-
+    private List<Room> roomList;
     /**
      * Create the game and initialise its internal map.
      */
     public Game() {
+        roomList = new ArrayList<Room>();
         createRooms();
         parser = new Parser();
         endboss = new Boss(pickNPay, "Harald");
@@ -51,6 +54,11 @@ class Game {
                 "in a small village ~15km west with a nice beach and brilliant restaurant where you can eat hake'n'chips🐟🍟");
         rugbyField = new Room("at the rugby field. Are you ready to get rumbled?🏉");
         beach = new Room("At the beach 🌴🏖. Be carefull of the great white shark");
+        roomList.add(lodge);
+        roomList.add(pickNPay);
+        roomList.add(paterNoster);
+        roomList.add(rugbyField);
+        roomList.add(beach);
 
         // initialise room exits
         lodge.setExit("north", null);
@@ -150,7 +158,7 @@ class Game {
     private void challengeBoss() {
 
         if (currentRoom == endboss.getLocation()) {
-            System.out.println("Your'e challenging the big boss Harald");
+            System.out.println("Your'e challenging the big boss "+endboss.getName());
 
             Random zufallsgenerator = new Random();
             int zahl1 = zufallsgenerator.nextInt((10 - 1) + 1) + 1; // gegoogled
@@ -168,7 +176,9 @@ class Game {
                 System.out.println("Glückwunsch, du hast das Spiel gewonnen!");
                 endboss.geschlagen();
             } else {
-                System.out.println("Das Ergebnis ist leider falsch. Du bist weiter im Spiel gefangen.");
+                System.out.println("Das Ergebnis ist leider falsch. Du bist weiter im Spiel gefangen. Der Boss befindet sich nun nicht mehr im aktuellen Raum.");
+                int index = zufallsgenerator.nextInt(roomList.size());
+                endboss.setLocation(roomList.get(index));
             }
 
         } else {
