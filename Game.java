@@ -45,7 +45,7 @@ class Game {
         Random zufallsgenerator = new Random();
         int index = zufallsgenerator.nextInt(5);
         endboss.setLocation(roomList.get(index));
-        System.out.println(endboss.getLocation().getDescription());
+       
 
     }
 
