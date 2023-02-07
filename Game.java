@@ -142,7 +142,7 @@ class Game {
             printHelp();
         else if (commandWord.equals("go"))
             goRoom(command);
-        else if (commandWord.equals("challenge"))
+        else if (commandWord.equals("look"))
             challengeBoss();
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);

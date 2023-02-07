@@ -31,7 +31,7 @@ class Boss {
         }
         else
         {
-            System.out.println("Leider istein Problemaufgetreten.");
+            System.out.println("Leider ist ein Problemaufgetreten.");
         }
     }
 
