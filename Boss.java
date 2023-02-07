@@ -5,11 +5,11 @@ class Boss {
     private Room location;
     private String name;
 
-    public Boss(Room newLocation, String newName) {
-        this.location = newLocation;
+    public Boss(String newName) {
         this.name = newName;
         this.beaten = false;
     }
+
 
     public Room getLocation() {
         return this.location;
@@ -31,7 +31,7 @@ class Boss {
         }
         else
         {
-            System.out.println("Leider ist ein Problemaufgetreten.");
+            System.out.println("Leider ist ein Problem aufgetreten.");
         }
     }
 

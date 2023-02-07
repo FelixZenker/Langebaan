@@ -33,6 +33,7 @@ class Game {
     // rooms
     Room lodge, pickNPay, paterNoster, rugbyField, beach;
     private List<Room> roomList;
+
     /**
      * Create the game and initialise its internal map.
      */
@@ -40,7 +41,12 @@ class Game {
         roomList = new ArrayList<Room>();
         createRooms();
         parser = new Parser();
-        endboss = new Boss(pickNPay, "Harald");
+        endboss = new Boss("Harald");
+        Random zufallsgenerator = new Random();
+        int index = zufallsgenerator.nextInt(5);
+        endboss.setLocation(roomList.get(index));
+        System.out.println(endboss.getLocation().getDescription());
+
     }
 
     /**
@@ -61,29 +67,17 @@ class Game {
         roomList.add(beach);
 
         // initialise room exits
-        lodge.setExit("north", null);
         lodge.setExit("east", pickNPay);
         lodge.setExit("south", rugbyField);
         lodge.setExit("west", paterNoster);
 
-        pickNPay.setExit("north", null);
-        pickNPay.setExit("east", null);
-        pickNPay.setExit("south", null);
         pickNPay.setExit("west", lodge);
 
-        paterNoster.setExit("north", null);
         paterNoster.setExit("east", lodge);
-        paterNoster.setExit("south", null);
-        paterNoster.setExit("west", null);
 
         rugbyField.setExit("north", lodge);
         rugbyField.setExit("east", beach);
-        rugbyField.setExit("south", null);
-        rugbyField.setExit("west", null);
 
-        beach.setExit("north", null);
-        beach.setExit("east", null);
-        beach.setExit("south", null);
         beach.setExit("west", rugbyField);
 
         currentRoom = lodge; // start game outside
@@ -158,7 +152,7 @@ class Game {
     private void challengeBoss() {
 
         if (currentRoom == endboss.getLocation()) {
-            System.out.println("Your'e challenging the big boss "+endboss.getName());
+            System.out.println("Your'e challenging the big boss " + endboss.getName());
 
             Random zufallsgenerator = new Random();
             int zahl1 = zufallsgenerator.nextInt((10 - 1) + 1) + 1; // gegoogled
@@ -169,16 +163,23 @@ class Game {
                     "Hinweis zur Eingabe: Schreiebe zunächst ein ? und ein Leerzeichen und dann das Ergebnis!");
             Parser antwortParser = new Parser();
             Command antwort = antwortParser.getCommand();
-            String antwortString = antwort.getSecondWord();
-            int antwortAlsZahl = Integer.parseInt(antwortString);
+            if (antwort.hasSecondWord()) {
+                String antwortString = antwort.getSecondWord();
+                int antwortAlsZahl = Integer.parseInt(antwortString);
 
-            if (antwortAlsZahl == (zahl1 * zahl2)) {
-                System.out.println("Glückwunsch, du hast das Spiel gewonnen!");
-                endboss.geschlagen();
-            } else {
-                System.out.println("Das Ergebnis ist leider falsch. Du bist weiter im Spiel gefangen. Der Boss befindet sich nun nicht mehr im aktuellen Raum.");
-                int index = zufallsgenerator.nextInt(roomList.size());
-                endboss.setLocation(roomList.get(index));
+                if (antwortAlsZahl == (zahl1 * zahl2)) {
+                    System.out.println("Glückwunsch, du hast das Spiel gewonnen!");
+                    endboss.geschlagen();
+                } else {
+                    System.out.println(
+                            "Das Ergebnis ist leider falsch. Du bist weiter im Spiel gefangen. Der Boss befindet sich nun nicht mehr im aktuellen Raum.");
+                    int index = zufallsgenerator.nextInt(roomList.size());
+                    endboss.setLocation(roomList.get(index));
+                }
+            }
+            else 
+            {
+                System.out.println("Falsches Eingabeformat, eine neue 'look' Aufforerung ist erforderlich und die Syntax muss stimmig sein.");
             }
 
         } else {
@@ -206,7 +207,7 @@ class Game {
     private void goRoom(Command command) {
         if (!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
-            System.out.println("Mach klare Ansagen?");
+            System.out.println("Mach klare Ansagen");
             return;
         }
 
